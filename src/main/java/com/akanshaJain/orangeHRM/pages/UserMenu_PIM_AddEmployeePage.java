@@ -1,25 +1,51 @@
 package com.akanshaJain.orangeHRM.pages;
 
+import java.io.IOException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.akanshaJain.orangeHRM.base.PreDefinedActions;
+import com.akanshaJain.orangeHRM.constants.ConstantPath;
+import com.akanshaJain.orangeHRM.util.PropertiesOperation;
 
 public class UserMenu_PIM_AddEmployeePage extends PreDefinedActions {
+	private PropertiesOperation propOperation;
+	static private UserMenu_PIM_AddEmployeePage userMenuPIMAddEmployeePage;
+	
+	private UserMenu_PIM_AddEmployeePage() {
+		try {
+			propOperation = new PropertiesOperation(ConstantPath.USERMENUPIMADDEMPLOYEEPAGELOCATOR);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static UserMenu_PIM_AddEmployeePage getObject() {
+		if(userMenuPIMAddEmployeePage == null)
+			userMenuPIMAddEmployeePage = new UserMenu_PIM_AddEmployeePage();
+		return userMenuPIMAddEmployeePage;
+	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeFirstName(String fName) {
-		driver.findElement(By.xpath("//input[@id='first-name-box']")).sendKeys(fName);
+		WebElement element = getElement(propOperation.getValue("employeeFirstName"), false);
+		enterText(element, fName);
+		//driver.findElement(By.xpath("//input[@id='first-name-box']")).sendKeys(fName);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeMiddleName(String mName) {
-		driver.findElement(By.xpath("//input[@id='middle-name-box']")).sendKeys(mName);
+		WebElement element = getElement(propOperation.getValue("employeeMiddleName"), false);
+		enterText(element, mName);
+		//driver.findElement(By.xpath("//input[@id='middle-name-box']")).sendKeys(mName);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeLastName(String lName) {
-		driver.findElement(By.xpath("//input[@id='last-name-box']")).sendKeys(lName);
+		WebElement element = getElement(propOperation.getValue("employeeLastName"), false);
+		enterText(element, lName);
+		//driver.findElement(By.xpath("//input[@id='last-name-box']")).sendKeys(lName);
 		return this;
 	}
 	

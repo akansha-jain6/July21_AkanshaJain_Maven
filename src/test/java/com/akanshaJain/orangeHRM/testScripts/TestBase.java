@@ -2,6 +2,7 @@ package com.akanshaJain.orangeHRM.testScripts;
 
 import org.testng.asserts.SoftAssert;
 import com.akanshaJain.orangeHRM.base.PreDefinedActions;
+import com.akanshaJain.orangeHRM.constants.ConstantPath;
 import com.akanshaJain.orangeHRM.pages.LoginPage;
 import com.akanshaJain.orangeHRM.pages.SlideMenuPage;
 
@@ -10,9 +11,9 @@ public class TestBase {
 	
 	public SlideMenuPage setup() {
 		System.out.println("STEP - Launch OrgHrm Application");
-		PreDefinedActions.start("https://automationaj06-trials72.orangehrmlive.com/");
+		PreDefinedActions.start(ConstantPath.URL);
 		LoginPage loginPage = LoginPage.getObject();
-		loginPage.enterCreds("Admin", "meK1hXRL@9");
+		loginPage.enterCreds(ConstantPath.ADMIN, ConstantPath.PASSWORD);
 		System.out.println("Click on Login button");
 		return loginPage.clickOnLoginButton();
 	}

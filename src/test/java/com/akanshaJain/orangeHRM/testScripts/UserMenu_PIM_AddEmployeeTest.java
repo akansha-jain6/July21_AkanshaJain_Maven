@@ -1,8 +1,11 @@
 package com.akanshaJain.orangeHRM.testScripts;
 
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.akanshaJain.orangeHRM.base.PreDefinedActions;
 import com.akanshaJain.orangeHRM.pages.SlideMenuPage;
 import com.akanshaJain.orangeHRM.pages.UserMenu_PIM_AddEmployeePage;
 
@@ -15,9 +18,9 @@ public class UserMenu_PIM_AddEmployeeTest extends TestBase {
 	
 	@Test
 	public void addEmployeeTest() {
-		SlideMenuPage slideMenuPage = new SlideMenuPage();
+		SlideMenuPage slideMenuPage = SlideMenuPage.getObject();
 		slideMenuPage.navigateTo("PIM->Add Employee");
-		UserMenu_PIM_AddEmployeePage userMenu_PIM_AddEmployeePage = new UserMenu_PIM_AddEmployeePage();
+		UserMenu_PIM_AddEmployeePage userMenu_PIM_AddEmployeePage = UserMenu_PIM_AddEmployeePage.getObject();
 		System.out.println("STEP- Add first name");
 		userMenu_PIM_AddEmployeePage.setEmployeeFirstName("Akansha");
 		System.out.println("STEP- Add middle name");
@@ -51,7 +54,10 @@ public class UserMenu_PIM_AddEmployeeTest extends TestBase {
 	}
 	
 	@AfterMethod
-	public void tearDown() {
+	public void takeScreenshotAndTearDown(ITestResult result) {
+		if(result.getStatus() == ITestResult.FAILURE) {
+			PreDefinedActions.captureScreenshot(result.getMethod().getMethodName());
+		}
 		super.teardown();
 	}
 }

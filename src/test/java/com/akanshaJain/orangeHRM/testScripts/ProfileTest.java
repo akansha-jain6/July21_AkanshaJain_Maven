@@ -1,9 +1,12 @@
 package com.akanshaJain.orangeHRM.testScripts;
 
 import java.util.ArrayList;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import com.akanshaJain.orangeHRM.base.PreDefinedActions;
 import com.akanshaJain.orangeHRM.pages.ProfilePage;
 
 public class ProfileTest extends TestBase {
@@ -16,7 +19,7 @@ public class ProfileTest extends TestBase {
 	@Test
 	public void verifyUserProfileDropdownOptions() {
 		System.out.println("STEP- Click on arrow icon on profile");
-		ProfilePage profilePage = new ProfilePage();
+		ProfilePage profilePage = ProfilePage.getObject();
 		profilePage.clickOnUserArrowDropdown();
 		softAssert.assertAll();
 		
@@ -48,6 +51,13 @@ public class ProfileTest extends TestBase {
 		System.out.println("STEP- Click on OK button on About pop-up");
 		profilePage.clickOkOnAboutPopUp();
 		softAssert.assertAll();
+	}
+	
+	@AfterMethod
+	public void afterMethod(ITestResult result) {
+		if(result.getStatus() == ITestResult.FAILURE) {
+			PreDefinedActions.captureScreenshot(result.getMethod().getMethodName());
+		}
 	}
 	
 	@AfterClass

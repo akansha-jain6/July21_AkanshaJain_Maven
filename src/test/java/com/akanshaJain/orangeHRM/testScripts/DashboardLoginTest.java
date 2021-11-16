@@ -21,7 +21,7 @@ public class DashboardLoginTest extends TestBase {
 	@Test
 	public void verifyWidgetsTest() {
 		System.out.println("STEP- Dashboard page header title should be Dashboard");
-		DashboardLoginPage dashboardLoginPage = new DashboardLoginPage();
+		DashboardLoginPage dashboardLoginPage = DashboardLoginPage.getObject();
 		String expectedPageHeaderTitle = "Dashboard";
 		String actualPageHeaderTitle = dashboardLoginPage.getPageHeaderTitle();
 		softAssert.assertEquals(actualPageHeaderTitle, expectedPageHeaderTitle);
@@ -33,7 +33,7 @@ public class DashboardLoginTest extends TestBase {
 		
 		System.out.println("STEP- Get all widgets count");
 		int actualWidgetsCount = dashboardLoginPage.getTotalWidgets();
-		softAssert.assertEquals(actualWidgetsCount, 12);
+		Assert.assertEquals(actualWidgetsCount, 12);
 		
 		System.out.println("STEP- Get all widgets title");
 		ArrayList<String> expectedWidgetsTitleList = new ArrayList<String>();
@@ -45,7 +45,7 @@ public class DashboardLoginTest extends TestBase {
 		expectedWidgetsTitleList.add("Employees on Leave Today");
 		expectedWidgetsTitleList.add("Time At Work");
 		expectedWidgetsTitleList.add("Performance Quick Feedback");
-		expectedWidgetsTitleList.add("Annual basic payment by Locatio n");
+		expectedWidgetsTitleList.add("Annual basic payment by Location");
 		expectedWidgetsTitleList.add("Latest Documents");
 		expectedWidgetsTitleList.add("Latest News");
 		expectedWidgetsTitleList.add("Yearly New Hires");

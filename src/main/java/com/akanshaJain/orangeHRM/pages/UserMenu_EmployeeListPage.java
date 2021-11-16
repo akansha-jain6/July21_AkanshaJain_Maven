@@ -1,33 +1,60 @@
 package com.akanshaJain.orangeHRM.pages;
 
-import org.openqa.selenium.By;
+import java.io.IOException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import com.akanshaJain.orangeHRM.base.PreDefinedActions;
+import com.akanshaJain.orangeHRM.constants.ConstantPath;
+import com.akanshaJain.orangeHRM.util.PropertiesOperation;
 
 public class UserMenu_EmployeeListPage extends PreDefinedActions {
+	private PropertiesOperation propOperation;
+	static private UserMenu_EmployeeListPage userMenuEmployeeListPage;
+	
+	private UserMenu_EmployeeListPage() {
+		try {
+			propOperation = new PropertiesOperation(ConstantPath.USERMENUEMPLOYEELISTLOCATOR);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static UserMenu_EmployeeListPage getObject() {
+		if(userMenuEmployeeListPage == null)
+			userMenuEmployeeListPage = new UserMenu_EmployeeListPage();
+		return userMenuEmployeeListPage;
+	}
 
 	public UserMenu_EmployeeListPage findByUserName(String name) {
-		driver.findElement(By.xpath("//input[@id='employee_name_quick_filter_employee_list_value']")).sendKeys(name);
-		driver.findElement(By.xpath("//i[@id='quick_search_icon']")).click();
+		enterEmployeeName(name);
+		//driver.findElement(By.xpath("//input[@id='employee_name_quick_filter_employee_list_value']")).sendKeys(name);
+		WebElement element = getElement(propOperation.getValue("searchIcon"), false);
+		clickOnElement(element);
+		//driver.findElement(By.xpath("//i[@id='quick_search_icon']")).click();
 		return this;
 	}
 	
+	private void enterEmployeeName(String name) {
+		WebElement element = getElement(propOperation.getValue("employeeName"), false);
+		enterText(element, name);
+	}
+	
 	public String getSearchedEmployeeName() {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement listOfSearchUsers = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[@id='employeeListTable']/tbody/tr[1]/td[3]")));
+		//WebDriverWait wait = new WebDriverWait(driver, ConstantPath.WAIT);
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[@id='employeeListTable']/tbody/tr[1]/td[3]")));
+		WebElement listOfSearchUsers = getElement(propOperation.getValue("listOfUsersTable"), true);
 		return listOfSearchUsers.getText();
 	}
 	
 	public UserMenu_EmployeeListPage getDefaultRowCountAtEndOfPage() {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement defaultRowCountDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@class='select-dropdown']")));
+		//WebDriverWait wait = new WebDriverWait(driver, ConstantPath.WAIT);
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@class='select-dropdown']")));
+		WebElement defaultRowCountDropdown = getElement(propOperation.getValue("defaultRowCountDropdown"), true);
 		defaultRowCountDropdown.getText();
 		return this;
 	}
 	
 	public int getNoOfRowsAsPerDefaultCount() {
-		return driver.findElements(By.xpath("//table[@id='employeeListTable']/tbody/tr")).size();
+		return getElements(propOperation.getValue("defaultRowCount"), false).size();
+		//return driver.findElements(By.xpath("//table[@id='employeeListTable']/tbody/tr")).size();
 	}
 }

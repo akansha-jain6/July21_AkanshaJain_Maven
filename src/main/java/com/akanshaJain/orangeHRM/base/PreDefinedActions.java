@@ -86,8 +86,10 @@ public class PreDefinedActions {
 		return element;
 	}
 	
-	protected List<WebElement> getElements(String locatorType, String locatorValue, boolean isWaitRequired) {
+	protected List<WebElement> getElements(String locator, boolean isWaitRequired) {
 		List<WebElement> elements = null;
+		String locatorType = locator.split(":-")[0].replace("[","").replace("]","");
+		String locatorValue = locator.split(":-")[1];
 		switch (locatorType) {
 		case "XPATH":
 			if (isWaitRequired)
@@ -107,8 +109,30 @@ public class PreDefinedActions {
 		return elements;
 	}
 	
-	protected List<String> getTextOfAllElements(String locatorType, String locatorValue, boolean isWaitRequired){
-		List<WebElement> widgetsListElements = getElements(locatorType, locatorValue, isWaitRequired);
+	protected List<WebElement> getElements(String locatorType, String locatorValue, boolean isWaitRequired) {
+		List<WebElement> elements = null;
+		locatorType = locatorType.replace("[","").replace("]","");
+		switch (locatorType) {
+		case "XPATH":
+			if (isWaitRequired)
+				elements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(locatorValue)));
+			else
+				elements = driver.findElements(By.xpath(locatorValue));
+			break;
+		case "ID":
+			if (isWaitRequired)
+				elements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(locatorValue)));
+			else
+				elements = driver.findElements(By.id(locatorValue));
+			break;
+		default:
+			throw new InvalidSelectorException("User Should Select values from XPATH, CSS, ID, NAME");
+		}
+		return elements;
+	}
+	
+	protected List<String> getTextOfAllElements(String locator, boolean isWaitRequired){
+		List<WebElement> widgetsListElements = getElements(locator, isWaitRequired);
 		List<String> widgetList = new ArrayList<String>();
 		
 		for(WebElement widgetElement : widgetsListElements) {

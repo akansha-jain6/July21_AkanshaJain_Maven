@@ -1,8 +1,10 @@
 package com.akanshaJain.orangeHRM.testScripts;
 
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import com.akanshaJain.orangeHRM.base.PreDefinedActions;
 import com.akanshaJain.orangeHRM.pages.SlideMenuPage;
 import com.akanshaJain.orangeHRM.pages.UserMenu_EmployeeListPage;
 
@@ -15,9 +17,9 @@ public class UserMenu_EmployeeListPaginationCountTest extends TestBase {
 
 	@Test
 	public void verifyPaginationcount() {
-		SlideMenuPage slideMenuPage = new SlideMenuPage();
+		SlideMenuPage slideMenuPage = SlideMenuPage.getObject();
 		slideMenuPage.navigateTo("PIM->Employee List");
-		UserMenu_EmployeeListPage userMenuEmployeeListPage = new UserMenu_EmployeeListPage();
+		UserMenu_EmployeeListPage userMenuEmployeeListPage = UserMenu_EmployeeListPage.getObject();
 		System.out.println("STEP- Verify default pagination count");
 		UserMenu_EmployeeListPage actualDefaultPaginationCount = userMenuEmployeeListPage.getDefaultRowCountAtEndOfPage();
 		softAssert.assertEquals(actualDefaultPaginationCount, 50);
@@ -29,7 +31,10 @@ public class UserMenu_EmployeeListPaginationCountTest extends TestBase {
 	}
 	
 	@AfterMethod
-	public void tearDown() {
+	public void takeScreenshotAndTearDown(ITestResult result) {
+		if(result.getStatus() == ITestResult.FAILURE) {
+			PreDefinedActions.captureScreenshot(result.getMethod().getMethodName());
+		}
 		super.teardown();
 	}
 }
