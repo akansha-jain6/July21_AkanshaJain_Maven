@@ -3,7 +3,7 @@
 <suite name="Suite">
   <test thread-count="5" name="Test">
     <classes>
-      <class name="com.akanshaJain.orangeHRM.myFirstTest"/>
+      <class name="com.akanshaJain.orangeHRM.testScripts.DashboardLoginTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
