@@ -17,8 +17,10 @@ public class ConstantPath {
 	public static final String PROFILEPAGELOCATOR_PATH = "profilePageLocator";
 	public static final String USERMENUEMPLOYEELISTLOCATOR = "userMenuEmployeeListLocator";
 	public static final String USERMENUPIMADDEMPLOYEEPAGELOCATOR = "userMenuPIMAddEmployeePageLocator";
+	public static final String LOG4J_FILE_PATH = ".//src//main//resources//config//log4j.properties";
 	
 	public static final int FASTWAIT = 3;
 	public static final int WAIT = 30;
 	public static final int LONGWAIT = 60;
+	public static final String DATE_FORMAT_TIMESTAMP = "dd_MM_yyyy_HH_mm_ss";
 }

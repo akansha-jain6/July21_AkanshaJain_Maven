@@ -1,7 +1,7 @@
 package com.akanshaJain.orangeHRM.pages;
 
 import java.io.IOException;
-
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +13,7 @@ import com.akanshaJain.orangeHRM.util.PropertiesOperation;
 public class UserMenu_PIM_AddEmployeePage extends PreDefinedActions {
 	private PropertiesOperation propOperation;
 	static private UserMenu_PIM_AddEmployeePage userMenuPIMAddEmployeePage;
+	Logger log = Logger.getLogger(UserMenu_PIM_AddEmployeePage.class);
 	
 	private UserMenu_PIM_AddEmployeePage() {
 		try {
@@ -31,6 +32,7 @@ public class UserMenu_PIM_AddEmployeePage extends PreDefinedActions {
 	public UserMenu_PIM_AddEmployeePage setEmployeeFirstName(String fName) {
 		WebElement element = getElement(propOperation.getValue("employeeFirstName"), false);
 		enterText(element, fName);
+		log.debug(element);
 		//driver.findElement(By.xpath("//input[@id='first-name-box']")).sendKeys(fName);
 		return this;
 	}
@@ -38,6 +40,7 @@ public class UserMenu_PIM_AddEmployeePage extends PreDefinedActions {
 	public UserMenu_PIM_AddEmployeePage setEmployeeMiddleName(String mName) {
 		WebElement element = getElement(propOperation.getValue("employeeMiddleName"), false);
 		enterText(element, mName);
+		log.debug(element);
 		//driver.findElement(By.xpath("//input[@id='middle-name-box']")).sendKeys(mName);
 		return this;
 	}
@@ -45,73 +48,111 @@ public class UserMenu_PIM_AddEmployeePage extends PreDefinedActions {
 	public UserMenu_PIM_AddEmployeePage setEmployeeLastName(String lName) {
 		WebElement element = getElement(propOperation.getValue("employeeLastName"), false);
 		enterText(element, lName);
+		log.debug(element);
 		//driver.findElement(By.xpath("//input[@id='last-name-box']")).sendKeys(lName);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeLocation(String location) {
-		driver.findElement(By.xpath("//i[text()='arrow_drop_down']")).click();
-		driver.findElement(By.xpath("//span[text()='"+location+"']//parent::a")).click();
+		enterOnArrow();
+		WebElement element = driver.findElement(By.xpath("//span[text()='"+location+"']//parent::a"));
+		clickOnElement(element);
+		log.debug(element);
 		return this;
 	}
 	
+	private void enterOnArrow() {
+		WebElement element = getElement(propOperation.getValue("arrowIcon"), false);
+		clickOnElement(element);
+		log.debug(element);
+	}
+	
 	public UserMenu_PIM_AddEmployeePage clickOnButton(String buttonName) {
-		driver.findElement(By.xpath("//button[text()='"+buttonName+"']")).click();
+		WebElement element = driver.findElement(By.xpath("//button[text()='"+buttonName+"']"));
+		clickOnElement(element);
+		log.debug(element);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeHobbies(String hobby) {
-		driver.findElement(By.xpath("//input[@id='5']")).sendKeys(hobby);
+		WebElement element = getElement(propOperation.getValue("employeeHobbies"), false);
+		enterText(element, hobby);
+		log.debug(element);
+		//driver.findElement(By.xpath("//input[@id='5']")).sendKeys(hobby);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeWorkShift(String shiftValue) {
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		WebElement workShiftDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='work_shift_id_inputfileddiv']//span[@class='caret']//following-sibling::input")));
-		workShiftDropdown.click();
+		WebElement workShiftDropdown = getElement(propOperation.getValue("employeeWorkShift"), true);
+		clickOnElement(workShiftDropdown);
+		log.debug(workShiftDropdown);
+		WebDriverWait wait = new WebDriverWait(driver, ConstantPath.WAIT);
+		//WebElement workShiftDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='work_shift_id_inputfileddiv']//span[@class='caret']//following-sibling::input")));
+		//workShiftDropdown.click();
 		WebElement workShiftOptionSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'dropdown-content select-dropdown')]/li/span[text()='"+shiftValue+"']")));
-		workShiftOptionSelect.click();
+		clickOnElement(workShiftOptionSelect);
+		log.debug(workShiftOptionSelect);
 		return this;
 	}
 	
 	//TODO - Sun, 20 Sep 2015
 	public UserMenu_PIM_AddEmployeePage setEmployeeEffectiveFromDate(String date) {
-		driver.findElement(By.xpath("//label[text()='Effective From']/following-sibling::span//i")).click();
-		driver.findElement(By.xpath("//input[@id='add_employee_effective_date']//following-sibling::span[1]//div[text()='"+date+"'][contains(@class,'--infocus')]")).click();
+		tapOnCalendarIcon();
+		WebElement element = driver.findElement(By.xpath("//input[@id='add_employee_effective_date']//following-sibling::span[1]//div[text()='"+date+"'][contains(@class,'--infocus')]"));
+		clickOnElement(element);
+		log.debug(element);
 		return this;
 	}
 	
+	private void tapOnCalendarIcon() {
+		//driver.findElement(By.xpath("//label[text()='Effective From']/following-sibling::span//i")).click();
+		WebElement element = getElement(propOperation.getValue("calendarIcon"), true);
+		clickOnElement(element);
+		log.debug(element);
+	}
+	
 	public UserMenu_PIM_AddEmployeePage setEmployeeRegion(String region) {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement regionDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='Region']/preceding-sibling::div/input")));
-		regionDropdown.click();
+		WebElement regionDropdown = getElement(propOperation.getValue("regionDropdown"), true);
+		//WebElement regionDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='Region']/preceding-sibling::div/input")));
+		clickOnElement(regionDropdown);
+		log.debug(regionDropdown);
+		WebDriverWait wait = new WebDriverWait(driver, ConstantPath.WAIT);
 		WebElement regionOptionSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'dropdown-content select-dropdown')]/li/span[text()='"+region+"']")));
-		regionOptionSelect.click();
+		clickOnElement(regionOptionSelect);
+		log.debug(regionOptionSelect);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeFTE(String fte) {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement fteDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='FTE']/preceding-sibling::div/input")));
-		fteDropdown.click();
+		WebElement fteDropdown = getElement(propOperation.getValue("fteDropdown"), true);
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='FTE']/preceding-sibling::div/input")));
+		clickOnElement(fteDropdown);
+		log.debug(fteDropdown);
+		WebDriverWait wait = new WebDriverWait(driver, ConstantPath.WAIT);
 		WebElement fteOptionSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'dropdown-content select-dropdown')]/li/span[text()='"+fte+"']")));
-		fteOptionSelect.click();
+		clickOnElement(fteOptionSelect);
+		log.debug(fteOptionSelect);
 		return this;
 	}
 	
 	public UserMenu_PIM_AddEmployeePage setEmployeeTempDept(String tempDept) {
 		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement tempDeptDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='Temporary Department']/preceding-sibling::div/input")));
-		tempDeptDropdown.click();
+		WebElement tempDeptDropdown = getElement(propOperation.getValue("tempDeptDropDown"), true);
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='Temporary Department']/preceding-sibling::div/input")));
+		clickOnElement(tempDeptDropdown);
+		log.debug(tempDeptDropdown);
 		WebElement tempDeptOptionSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'dropdown-content select-dropdown')]/li/span[text()='"+tempDept+"']")));
-		tempDeptOptionSelect.click();
+		clickOnElement(tempDeptOptionSelect);
+		log.debug(tempDeptOptionSelect);
 		return this;
 	}
 	
 	public String verifySuccessMessage() {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement displaySuccessMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='toast-container']/div/div[text()='Successfully Saved']")));
+		//WebDriverWait wait = new WebDriverWait(driver, 20);
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='toast-container']/div/div[text()='Successfully Saved']")));
+		WebElement displaySuccessMessage = getElement(propOperation.getValue("successMessage"), true);
 		String successMessage = displaySuccessMessage.getText();
+		log.debug(successMessage);
 		return successMessage;
 	}
 }
