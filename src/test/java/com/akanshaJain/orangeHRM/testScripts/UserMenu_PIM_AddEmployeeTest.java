@@ -1,12 +1,16 @@
 package com.akanshaJain.orangeHRM.testScripts;
 
+import org.apache.log4j.Logger;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import com.akanshaJain.orangeHRM.base.PreDefinedActions;
 import com.akanshaJain.orangeHRM.pages.SlideMenuPage;
 import com.akanshaJain.orangeHRM.pages.UserMenu_PIM_AddEmployeePage;
 
 public class UserMenu_PIM_AddEmployeeTest extends TestBase {
+	Logger log = Logger.getLogger(UserMenu_PIM_AddEmployeeTest.class);
 	
 	@BeforeMethod
 	public void setUp() {
@@ -15,43 +19,46 @@ public class UserMenu_PIM_AddEmployeeTest extends TestBase {
 	
 	@Test
 	public void addEmployeeTest() {
-		SlideMenuPage slideMenuPage = new SlideMenuPage();
+		SlideMenuPage slideMenuPage = SlideMenuPage.getObject();
 		slideMenuPage.navigateTo("PIM->Add Employee");
-		UserMenu_PIM_AddEmployeePage userMenu_PIM_AddEmployeePage = new UserMenu_PIM_AddEmployeePage();
-		System.out.println("STEP- Add first name");
+		UserMenu_PIM_AddEmployeePage userMenu_PIM_AddEmployeePage = UserMenu_PIM_AddEmployeePage.getObject();
+		log.info("STEP- Add first name");
 		userMenu_PIM_AddEmployeePage.setEmployeeFirstName("Akansha");
-		System.out.println("STEP- Add middle name");
+		log.info("STEP- Add middle name");
 		userMenu_PIM_AddEmployeePage.setEmployeeMiddleName("K");
-		System.out.println("STEP- Add last name");
+		log.info("STEP- Add last name");
 		userMenu_PIM_AddEmployeePage.setEmployeeLastName("Jain");
-		System.out.println("STEP- Add employee location");
+		log.info("STEP- Add employee location");
 		userMenu_PIM_AddEmployeePage.setEmployeeLocation("Indian Development Center");
-		System.out.println("STEP- Click on Next button");
+		log.info("STEP- Click on Next button");
 		userMenu_PIM_AddEmployeePage.clickOnButton("Next");
-		System.out.println("STEP- Add hobbies");
+		log.info("STEP- Add hobbies");
 		userMenu_PIM_AddEmployeePage.setEmployeeHobbies("Painting");
-		System.out.println("STEP- Click on Next button");
+		log.info("STEP- Click on Next button");
 		userMenu_PIM_AddEmployeePage.clickOnButton("Next");
-		System.out.println("STEP- Add work shift");
+		log.info("STEP- Add work shift");
 		userMenu_PIM_AddEmployeePage.setEmployeeWorkShift("General");
-		System.out.println("STEP- Add effecive from date");
+		log.info("STEP- Add effecive from date");
 		userMenu_PIM_AddEmployeePage.setEmployeeEffectiveFromDate("6");
-		System.out.println("STEP- Add region");
+		log.info("STEP- Add region");
 		userMenu_PIM_AddEmployeePage.setEmployeeRegion("Region-1");
-		System.out.println("STEP- Add FTE");
+		log.info("STEP- Add FTE");
 		userMenu_PIM_AddEmployeePage.setEmployeeFTE("0.5");
-		System.out.println("STEP- Add temporary department");
+		log.info("STEP- Add temporary department");
 		userMenu_PIM_AddEmployeePage.setEmployeeTempDept("Sub unit-1");
-		System.out.println("STEP- Click on Save button");
+		log.info("STEP- Click on Save button");
 		userMenu_PIM_AddEmployeePage.clickOnButton("Save");
-		System.out.println("STEP- Get success message");
+		log.info("STEP- Get success message");
 		String expectedSuccessMessage = "Successfully Saved";
 		String actualSuccessMessage = userMenu_PIM_AddEmployeePage.verifySuccessMessage();
 		softAssert.assertEquals(actualSuccessMessage, expectedSuccessMessage);
 	}
 	
 	@AfterMethod
-	public void tearDown() {
+	public void takeScreenshotAndTearDown(ITestResult result) {
+		if(result.getStatus() == ITestResult.FAILURE) {
+			PreDefinedActions.captureScreenshot(result.getMethod().getMethodName());
+		}
 		super.teardown();
 	}
 }

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -20,14 +22,20 @@ import com.akanshaJain.orangeHRM.util.DateOperations;
 
 public class PreDefinedActions {
 	protected static WebDriver driver;
-	private static WebDriverWait wait; 
+	private static WebDriverWait wait;
+	static Logger log = Logger.getLogger(PreDefinedActions.class);
+	
+	static {
+		System.setProperty("current.date.time", DateOperations.getTimeStamp());
+		PropertyConfigurator.configure(ConstantPath.LOG4J_FILE_PATH);
+	}
 	
 	public static void start(String url) {
 		System.setProperty(ConstantPath.CHROMEDRIVER_KEY, ConstantPath.CHROMEDRIVER_PATH);
-		System.out.println("STEP - Open Chrome Browser");
+		log.trace("STEP - Open Chrome Browser");
 		driver = new ChromeDriver();
 		//driver.manage().timeouts().implicitlyWait(ConstantPath.WAIT, TimeUnit.SECONDS);
-		System.out.println("STEP - Enter url");
+		log.trace("STEP - Enter url");
 		driver.get(url);
 		driver.manage().window().maximize();
 		wait = new WebDriverWait(driver, ConstantPath.WAIT);
@@ -57,6 +65,7 @@ public class PreDefinedActions {
 			default :
 				throw new InvalidSelectorException("User Should Select values from XPATH, CSS, ID, NAME");
 		}
+		log.trace(element);
 		return element;
 	}
 	
@@ -83,11 +92,14 @@ public class PreDefinedActions {
 			default :
 				throw new InvalidSelectorException("User Should Select values from XPATH, CSS, ID, NAME");
 		}
+		log.trace(element);
 		return element;
 	}
 	
-	protected List<WebElement> getElements(String locatorType, String locatorValue, boolean isWaitRequired) {
+	protected List<WebElement> getElements(String locator, boolean isWaitRequired) {
 		List<WebElement> elements = null;
+		String locatorType = locator.split(":-")[0].replace("[","").replace("]","");
+		String locatorValue = locator.split(":-")[1];
 		switch (locatorType) {
 		case "XPATH":
 			if (isWaitRequired)
@@ -104,22 +116,48 @@ public class PreDefinedActions {
 		default:
 			throw new InvalidSelectorException("User Should Select values from XPATH, CSS, ID, NAME");
 		}
+		log.trace(elements);
 		return elements;
 	}
 	
-	protected List<String> getTextOfAllElements(String locatorType, String locatorValue, boolean isWaitRequired){
-		List<WebElement> widgetsListElements = getElements(locatorType, locatorValue, isWaitRequired);
+	protected List<WebElement> getElements(String locatorType, String locatorValue, boolean isWaitRequired) {
+		List<WebElement> elements = null;
+		locatorType = locatorType.replace("[","").replace("]","");
+		switch (locatorType) {
+		case "XPATH":
+			if (isWaitRequired)
+				elements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(locatorValue)));
+			else
+				elements = driver.findElements(By.xpath(locatorValue));
+			break;
+		case "ID":
+			if (isWaitRequired)
+				elements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(locatorValue)));
+			else
+				elements = driver.findElements(By.id(locatorValue));
+			break;
+		default:
+			throw new InvalidSelectorException("User Should Select values from XPATH, CSS, ID, NAME");
+		}
+		log.trace(elements);
+		return elements;
+	}
+	
+	protected List<String> getTextOfAllElements(String locator, boolean isWaitRequired){
+		List<WebElement> widgetsListElements = getElements(locator, isWaitRequired);
 		List<String> widgetList = new ArrayList<String>();
 		
 		for(WebElement widgetElement : widgetsListElements) {
 			widgetList.add(widgetElement.getText());
 		}
+		log.trace(widgetList);
 		return widgetList;
 	}
 	
 	private void scrollToElement(WebElement element) {
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].scrollIntoView(true)", element);		
+		js.executeScript("arguments[0].scrollIntoView(true)", element);	
+		log.trace(element);
 	}
 	
 	protected void clickOnElement(WebElement element) {
@@ -127,6 +165,7 @@ public class PreDefinedActions {
 			scrollToElement(element);
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 		element.click();
+		log.trace(element);
 	}
 	
 	protected boolean isElementDisplayed(String locatorType, String locatorValue, boolean isWaitRequired) {

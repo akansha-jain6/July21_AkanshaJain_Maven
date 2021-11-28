@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -15,19 +16,22 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import com.akanshaJain.orangeHRM.constants.ConstantPath;
+
 public class TakeScreenshotTest {
-	WebDriver driver; 
+	WebDriver driver;
+	Logger log = Logger.getLogger(TakeScreenshotTest.class);
 	
 	@Test
 	public void takeScreenShot() throws InterruptedException {
-		System.setProperty("webdriver.chrome.driver", ".//resources//chromedriver");
-		System.out.println("STEP - Open Chrome Browser");
+		System.setProperty(ConstantPath.CHROMEDRIVER_KEY, ConstantPath.CHROMEDRIVER_PATH);
+		log.info("STEP - Open Chrome Browser");
 		driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		System.out.println("STEP - Enter url");
+		driver.manage().timeouts().implicitlyWait(ConstantPath.WAIT, TimeUnit.SECONDS);
+		log.info("STEP - Enter url");
 		driver.get("http://automationbykrishna.com/");
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(ConstantPath.WAIT, TimeUnit.SECONDS);
 		driver.findElement(By.id("registration21")).click();
 		Thread.sleep(2000);
 	}
